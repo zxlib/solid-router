@@ -34,8 +34,6 @@ export interface RouterProviderProps {
 export const HistoryRouterProvider: Component<RouterProviderProps> = (
   props,
 ) => {
-  // const log = (...args: any[]) => console.log(`Router `, ...args);
-
   const history = useHistory();
   const [getRoute, setRoute] = createSignal<ActiveRoute>(false);
 
