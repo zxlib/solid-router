@@ -1,5 +1,11 @@
 # Router for solid js
 
+## Installation
+
+```bash
+npm install @zxlib/solid-router
+```
+
 ## Usage
 
 ```jsx
