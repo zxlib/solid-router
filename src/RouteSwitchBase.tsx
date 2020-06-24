@@ -14,7 +14,6 @@ import { MatchRouteFn, RouteMatch } from './utils';
 export interface RouteSwitchProps {
   id?: string; // for testing, etc
   fallback?: JSX.Element;
-  routes?: RouteModel[];
   onRoute?: (route: ActiveRoute, parent?: ActiveRoute) => any;
   // children?: Route[]; // TODO: type it ot allow only routes
 }
@@ -111,26 +110,16 @@ const evalMatchResult = (routes: RouteModel[], matchRoute: MatchRouteFn) => {
 export const RouteSwitchBase: Component<RouteSwitchBaseProps> = (props) => {
   const parent = useRouteSwitch();
 
-  // const log = (...args: any[]) =>
-  //   console.log(`switch[${props.id ?? ''}] `, ...args);
+  const children = (Array.isArray(props.children)
+    ? props.children
+    : [props.children]) as RouteProps[];
 
-  // log('create!');
-
-  const getRoutes = createMemo(
-    mapArray(
-      () =>
-        [
-          ...(props.routes ?? []),
-          ...(Array.isArray(props.children)
-            ? props.children
-            : [props.children]),
-        ] as RouteProps[],
-      (route) => createRouteModel(route, parent?.getRoute()),
-    ),
+  const routes = children.map((route) =>
+    createRouteModel(route, parent?.getRoute()),
   );
 
   const getMatchResult = createMemo(
-    () => evalMatchResult(getRoutes(), props.matchRoute),
+    () => evalMatchResult(routes, props.matchRoute),
     { idx: -1, match: false },
     (a, b) => a.idx === b.idx && !a.match === !b.match,
   );
